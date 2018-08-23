@@ -176,7 +176,7 @@
 		 /* === Fetch public user followers and download in pdf === */
         public function downloadPublicUserFollowers($screen_name) {
 			
-            $tweets = $this->getFollowersuser($screen_name);			
+            $tweets = $this->Followers_PDF($screen_name);			
             $obj_pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);  
             $obj_pdf->SetCreator(PDF_CREATOR);  
 			$obj_pdf->SetTitle("Follower List");  
@@ -199,14 +199,14 @@
         }
         
         /* === get public user follower information in pdf === */ 
-		public function getFollowersuser($screen_name) {
+		public function Followers_PDF($screen_name) {
             $connection = $this->getConnect();
             $next = -1;
             $max = 0;
             while( $next != 0 ) {
-                $friends = $connection->get("followers/list", ["count" => 200,"screen_name"=>$screen_name,"next_cursor"=>$next]);
-                $followers[] = $friends;
-                $next = $friends->next_cursor;
+                $follow = $connection->get("followers/list", ["count" => 200,"screen_name"=>$screen_name,"next_cursor"=>$next]);
+                $followers[] = $follow;
+                $next = $follow->next_cursor;
                 if($max==0)
                     break;
                 $max++;
@@ -232,64 +232,7 @@
             return $tweets;
         }
         
-        /* === get public user autosearch === */ 
-        public function searchfun() {
-            $connection = $this->getConnect();
-            if (isset($_GET['term'])) {
-                if (!isset($_SESSION['data'])) {
-                   
-                    $connection = $this->getConnect();
-                    $myprofile_value = $_SESSION['my_profile'];
-                    $my_scrren_name = $myprofile_value['screen_name'];
-                    $followerslist = $connection->get("followers/ids", array('screen_name' => $my_scrren_name, 'count' => 5000));
-                    $cnt = 0;
-                    $var_assign = 0;
-                    $loop_cnt = '';
-                    foreach ($followerslist->ids as $followr_id) {
-                        if ($cnt % 100 == 0) {
-                            $var_assign = $var_assign + 1;
-                            $loop_cnt = $var_assign;
-                            ${"var$var_assign"} = '';
-                        }
-                        ${"var$var_assign"} = ${"var$var_assign"} . "," . $followr_id;    //Concatenate followers id in comma seperated format
-                        $cnt = $cnt + 1;
-                    }
-                    $response_array = array();
-                    $new = 1;
-                    for ($i = 1; $i <= $loop_cnt; $i++) {
-                        $id_lookup = $connection->get("users/lookup", array('user_id' => ${"var$i"}));
-                        foreach ($id_lookup as $key => $value) {
-                            $response_array[$new]['id'] = $value->id;
-                            $response_array[$new]['name'] = $value->screen_name;
-                            $new = $new + 1;
-                        }
-                    }
-                    $_SESSION['data'] = $response_array;
-                }
-                $keyword = $_GET['term'];
-                $my_search = array();
-                $my_search = $_SESSION['data'];
-                $public_user = array();
-                for ($i = 1; $i <= 3; $i++) {
-                    $followerslist = $connection->get("users/search", array('q' => $keyword, 'count' => 20, 'page' => $i));
-                    foreach ($followerslist as $key => $value) {
-                        $public_user[] = $value->screen_name;
-                    }
-                }
-                $follower_session = $my_search;
-                $followername_array = array();
-                foreach ($follower_session as $key => $follw_value) {
-                    $followername_array[$key] = $follw_value['name'];
-                }
-                $input = preg_quote($keyword, '~');
-                $result1 = preg_grep('~' . $input . '~', $followername_array);
-                $final_result = array_merge($result1, $public_user);
-                if (empty($final_result)) {
-                    $final_result = array("No user found");
-                }
-                echo json_encode($final_result);
-            }
-        }
+        
 
 
         
