@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- ==== Document Title ==== -->
-    <title>Twitter Challenge 1</title>
+    <title>Twitter Challenge</title>
     
     <!-- ==== Document Meta ==== -->
     <meta name="author" content="ThemeLooks">
