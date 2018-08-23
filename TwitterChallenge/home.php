@@ -160,12 +160,12 @@
 						  <div class="modal-content">
 							<div class="modal-header">
 							  <button type="button" class="close" data-dismiss="modal">&times;</button>
-							  <h4 class="modal-title">Search And Download Public Followers</h4>
+							  <h4 class="modal-title">Enter Valid Screenname And Download Public user Followers</h4>
 							</div>
 							<div class="modal-body">
 							<form method="post" action="controller.php">
-								<input type="text" name="key" placeholder="Search Public Followers" class="form-control search-box" id='search-box' required>
-								<span class="searchMessage" style="display: none;"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span><br/>
+								<input type="text" name="key" placeholder="Enter Screenname" class="form-control search-box" id='search-box' required>
+								<!--<span class="searchMessage" style="display: none;"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span>--><br/>
 								
 							<label for="sel1">Select option for download Format:</label>
                             <select class="form-control" name="format">
@@ -176,7 +176,7 @@
                                 
                             </select>
 								<br/>
-								<button type="submit" class="btn btn-primary" name="search_public_user">Search&&Downlad<i class="fa fa-search"></i></button>
+								<button type="submit" class="btn btn-primary" name="search_public_user">Download<i class="fa fa-search"></i></button>
 								
 								<!--<span style="color:black;font-size:16px;"></span>-->
 							</form>
