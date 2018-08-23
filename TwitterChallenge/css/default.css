@@ -1,0 +1,48 @@
+.pac-container {
+    background-color: #FFF;
+    z-index: 20;
+    position: fixed;
+    display: inline-block;
+    float: left;
+}
+.modal{
+    z-index: 20;   
+}
+.modal-backdrop{
+    z-index: 10;        
+}
+a:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+
+
+.follower {
+    margin-top: 10px;
+}
+
+#myCarousel {
+    height: 150px;
+}
+
+.left {
+    border-right: 1px gray;
+}
+
+.follower:hover {
+    
+    cursor: pointer;
+}
+.owncss{
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 10px;
+}
