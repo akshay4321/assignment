@@ -9,7 +9,7 @@ Part-1: User Timeline
 Part-2: Followers Timeline
 
      •  Display list of 10 followers and search box with auto suggestion and show his follower as soon as user type.
-     •	When User click on follower name his tweets displayed in JS slideshow using Ajax
+     •  When User click on follower name his tweets displayed in JS slideshow using Ajax
 
 
 Part-3: Download Followers
