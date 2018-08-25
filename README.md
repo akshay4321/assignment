@@ -26,11 +26,8 @@ Libraries used in assignment:
     use jquery bxslider libraries  
     https://bxslider.com/install/
 
-   use tcpdf libraries for pdf download
-   https://tcpdf.org/
+    use tcpdf libraries for pdf download
+    https://tcpdf.org/
 
-   use google spreadsheet api for uploading file in drive
-   https://developers.google.com/drive/api/v3/about-sdk
-
-
-
+    use google spreadsheet api for uploading file in drive
+    https://developers.google.com/drive/api/v3/about-sdk
