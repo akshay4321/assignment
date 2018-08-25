@@ -8,10 +8,10 @@ $(document).ready(function() {
             dataType: 'json',
             type: 'GET',
             success: function(results) {
-                $("#name_user").html(results.name);
-                $("#user_pic").attr('src', results.propic);
-                $("#name_user_left").html(results.name);
-                $("#user_pic_left").attr('src', results.propic);
+                $("#loginname").html(results.name);
+                $("#loginpic").attr('src', results.propic);
+                $("#followname").html(results.name);
+                $("#followpic").attr('src', results.propic);
                 $('#followers-names').attr('data-value', results.screen_name);
                 var list = '';
                 var length = results.tweets.length;
