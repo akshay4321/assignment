@@ -2,7 +2,7 @@ $(document).ready(function() {
     var followers_info = "";
     var screen_name = "";
 
-    function fetchUserInfo() {
+    function UserDetail() {
         $.ajax({
             url: 'controller.php?userdata=true',
             dataType: 'json',
@@ -27,12 +27,12 @@ $(document).ready(function() {
                 }
                 $('.carousel-inner').html(list);
                 $('#myCarousel').carousel();
-                fetchFollowersInfo();
+                FollowersDetails();
             }
         });
     }
 
-    function fetchFollowersInfo() {
+    function FollowersDetails() {
         $.ajax({
             url: 'controller.php?fetchFollowers=' + screen_name,
             dataType: 'json',
@@ -96,21 +96,6 @@ $(document).ready(function() {
         }
         $('#search').html(list);
     });
-    fetchUserInfo();
+    UserDetail();
 });
-$(function () {
-    $('.search-box').autocomplete({
-        search: function (event, ui) {
-            $('.searchMessage').show();
-        },
-        open: function (event, ui) {
-            $('.searchMessage').hide();
-        },
-        source: 'controller.php?autosearch=true',
-        minLength: 1
-    }).off('blur').on('blur', function () {
-        if (document.hasFocus()) {
-            $('ul.ui-autocomplete').hide();
-        }
-    });
-});
+
