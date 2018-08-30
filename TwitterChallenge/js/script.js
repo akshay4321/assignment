@@ -96,10 +96,6 @@ $(document).ready(function() {
         }
         $('#search').html(list);
     });
-<<<<<<< HEAD
     UserDetail();
-=======
-    fetchUserInfo();
->>>>>>> da3a282c1e0489d6feda9ba55be8e30da1903dc5
 });
 
