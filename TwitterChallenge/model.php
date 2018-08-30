@@ -212,11 +212,11 @@
                 $max++;
             }
          
-			$htmltext = '<center><h1> followers list of '.$screen_name.' </h1></center><hr><br> ';
+			$htmltext = '<center><h1> followers list of '.$screen_name.' </h1></center><hr><br><br> ';
 			foreach( $followers as $val ) {
                 foreach( $val->users as $user ) {
                     $name = $user->name;
-					$htmltext .= '<h2>'.$name.'</h2><br>';
+					$htmltext .= '<table border="1" cellspacing="2" cellpadding="2" align="center"><tr><td>'.$name.'</td></tr></table>';
                 }
             }
             
