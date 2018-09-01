@@ -66,7 +66,7 @@
                         
                         
                         <li>
-                            <a class="dropdown-toggle" data-toggle="dropdown"> <b id="name_user"></b> <img id="user_pic" src="" style="border-radius: 50%" /> </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown"> <b id="loginname"></b> <img id="loginpic" src="" style="border-radius: 50%" /> </a>
                         </li>
                     </ul>
                     <!-- Header Topbar Links End -->
@@ -170,9 +170,9 @@
 							<label for="sel1">Select option for download Format:</label>
                             <select class="form-control" name="format">
                                 <option value="#">Select Format</option>
-                                <option value="drive">Google Drive SpreedSheet</option>
-                                <option value="pdf">PDF</option>
-                                <option value="xml">XML</option>
+								<option value="pdf">PDF (All Followers)</option>
+                                <option value="xml">XML (ONLY 200 Followers)</option>
+								<option value="drive">Google SpreedSheet (ONLY 200 Followers)</option>
                                 
                             </select>
 								<br/>
