@@ -27,7 +27,7 @@ $service = new Google_Service_Drive($client);
 // Set the file metadata for drive
 $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-$title = "mytweets";
+$title = "Followerlist";
 $description = "Uploaded from your very first google drive application!";
 if (isset($_GET['code'])) {
     $client->authenticate($_GET['code']);
@@ -46,7 +46,7 @@ if (isset($_SESSION['upload_token']) && $_SESSION['upload_token']) {
 
 date_default_timezone_set('Asia/Calcutta');
 $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-$title = "mytweets";
+$title = "Followerlist";
 $driveInfo = insertFile($service, $title, $description, $mimeType);
 function insertFile($service, $title, $description, $mimeType)
 {
@@ -57,10 +57,10 @@ function insertFile($service, $title, $description, $mimeType)
     $file->setMimeType($mimeType);
     try {
         // Get the contents of the file uploaded
-        $data = fopen('my_tweets.xlsx', 'w');
+        $data = fopen('my_follower.xlsx', 'w');
 
         $tweets = $_SESSION['user-tweets'];
-        $header = array("text");
+        $header = array("Followerlist");
         fputcsv($data,$header,"\t");
         foreach ($tweets as $tweet) {
             $d = array($tweet);
@@ -68,14 +68,14 @@ function insertFile($service, $title, $description, $mimeType)
         }
         
         fclose($data);
-        $data = file_get_contents('my_tweets.xlsx');
+        $data = file_get_contents('my_follower.xlsx');
         //print_r($data);
         $createdFile = $service->files->insert($file, array(
             'data' => $data,
             'mimeType' => $mimeType,
             'uploadType' => 'multipart',
         ));
-        unlink('my_tweets.xlsx');
+        unlink('my_follower.xlsx');
         // Return a bunch of data including the link to the file we just uploaded
         return $createdFile;
     } catch (Exception $e) {
