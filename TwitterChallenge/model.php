@@ -201,26 +201,33 @@
         /* === get public user follower information in pdf === */ 
 		public function Followers_PDF($screen_name) {
             $connection = $this->getConnect();
-            $next = -1;
-            $max = 0;
-            while( $next != 0 ) {
-                $follow = $connection->get("followers/list", ["count" => 200,"screen_name"=>$screen_name,"next_cursor"=>$next]);
-                $followers[] = $follow;
-                $next = $follow->next_cursor;
-                if($max==0)
-                    break;
-                $max++;
-            }
-         
-			$htmltext = '<center><h1> followers list of '.$screen_name.' </h1></center><hr><br><br> ';
-			foreach( $followers as $val ) {
-                foreach( $val->users as $user ) {
-                    $name = $user->name;
-					$htmltext .= '<table border="1" cellspacing="2" cellpadding="2" align="center"><tr><td>'.$name.'</td></tr></table>';
-                }
-            }
-            
-			return $htmltext;
+           
+			if(isset($connection))
+			{
+				$count = 1;
+				$next = -1;
+				while($count != 0)
+				{
+					$follower = $connection->get('followers/ids',array('count'=>5000,'screen_name'=>$screen_name,'cursor'=>$next));
+					$next = $follower->next_cursor;
+					if(!isset($next))
+					{	
+						break;
+					}
+					
+					$namearrays= array_chunk($follower->ids, 100);
+					foreach($namearrays as $implode) {
+						$data = $connection->get('users/lookup', array('user_id' => implode(',', $implode)));
+						foreach($data as $users) {
+							$name = $users->name;
+							$htmltext .= '<table border="1" cellspacing="2" cellpadding="2" align="center"><tr><td>'.$count.'</td><td>'.$name.'</td></tr></table>';
+							$count++;
+						}
+					}
+				}
+				return $htmltext;
+			}
+			
            
         }
         
