@@ -1,7 +1,6 @@
 <?php
      require "lib/twitteroauth/autoload.php";     
 	 require "lib/tcpdf/tcpdf.php";
-
     
     use Abraham\TwitterOAuth\TwitterOAuth;
 	
@@ -156,7 +155,6 @@
         	return $data;
            
         }
-
         /* === Fetch public user Follower and download in xml === */
         public function Followers_XML($key) {
             $name="FollowerList";
@@ -173,37 +171,29 @@
             }
         }
         
-		 /* === Fetch public user followers and download in pdf === */
-        public function downloadPublicUserFollowers($screen_name) {
+		 /* === Fetch public user followers and download in pdf &
+				Send the followers attachement file in mail
+		 === */
+        public function downloadPublicUserFollowers($screen_name,$emailadd) {
 			
-            $tweets = $this->Followers_PDF($screen_name);			
-            $obj_pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);  
-            $obj_pdf->SetCreator(PDF_CREATOR);  
-			$obj_pdf->SetTitle("Follower List");  
-            $obj_pdf->SetHeaderData('', '', PDF_HEADER_TITLE, PDF_HEADER_STRING);  
-			$obj_pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));  
-			$obj_pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));  
-			$obj_pdf->SetDefaultMonospacedFont('helvetica');  
-			$obj_pdf->SetFooterMargin(PDF_MARGIN_FOOTER);  
-			$obj_pdf->SetMargins(PDF_MARGIN_LEFT, '5', PDF_MARGIN_RIGHT);  
-			$obj_pdf->setPrintHeader(false);  
-			$obj_pdf->setPrintFooter(false);  
-			$obj_pdf->SetAutoPageBreak(TRUE, 10);  
-			$obj_pdf->SetFont('helvetica', '', 12);  
-			$obj_pdf->AddPage();  
-			$obj_pdf->writeHTML($tweets);  
-            $obj_pdf->Output($screen_name.'.pdf', 'D');  //'D' is for Download PDF
-             
-
-			  	
-        }
-        
-        /* === get public user follower information in pdf === */ 
-		public function Followers_PDF($screen_name) {
-            $connection = $this->getConnect();
            
+            $connection = $this->getConnect();
 			if(isset($connection))
 			{
+				$obj_pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);  
+				$obj_pdf->SetCreator(PDF_CREATOR);  
+				$obj_pdf->SetTitle("Follower List");  
+				$obj_pdf->SetHeaderData('', '', PDF_HEADER_TITLE, PDF_HEADER_STRING);  
+				$obj_pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));  
+				$obj_pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));  
+				$obj_pdf->SetDefaultMonospacedFont('helvetica');  
+				$obj_pdf->SetFooterMargin(PDF_MARGIN_FOOTER);  
+				$obj_pdf->SetMargins(PDF_MARGIN_LEFT, '5', PDF_MARGIN_RIGHT);  
+				$obj_pdf->setPrintHeader(false);  
+				$obj_pdf->setPrintFooter(false);  
+				$obj_pdf->SetAutoPageBreak(TRUE, 10);  
+				$obj_pdf->SetFont('helvetica', '', 12);  
+				$obj_pdf->AddPage();  
 				$count = 1;
 				$next = -1;
 				while($count != 0)
@@ -211,7 +201,7 @@
 					$follower = $connection->get('followers/ids',array('count'=>5000,'screen_name'=>$screen_name,'cursor'=>$next));
 					$next = $follower->next_cursor;
 					if(!isset($next))
-					{	
+					{	$obj_pdf->WriteHTML('<p>Once you can download followers then after 15 to 20 minutes you can download once again</p><br/><h3>So please download after 20 minutes</h3>');
 						break;
 					}
 					
@@ -220,16 +210,55 @@
 						$data = $connection->get('users/lookup', array('user_id' => implode(',', $implode)));
 						foreach($data as $users) {
 							$name = $users->name;
-							$htmltext .= '<table border="1" cellspacing="2" cellpadding="2" align="center"><tr><td>'.$count.'</td><td>'.$name.'</td></tr></table>';
+							$obj_pdf->WriteHTML('<table border="1" cellspacing="2" cellpadding="2" align="center"><tr><td>'.$count.'</td><td>'.$name.'</td></tr></table>');
 							$count++;
 						}
 					}
 				}
-				return $htmltext;
+				ob_end_clean();
+				
+				$obj_pdf->Output($screen_name.'.pdf', 'D');  //'D' is for Download PDF
+				
+				$pdfString = $obj_pdf->Output('follower.pdf', 'S');
+				
+				require("lib/class.phpmailer.php");
+
+				$mail = new PHPMailer;
+
+				$mail->IsMAIL();
+				$mail->Host = 'ssl://smtp.gmail.com';                 // Specify main and backup SMTP servers
+				$mail->SMTPAuth = true;                               // Enable SMTP authentication
+				$mail->Username = 'akshay@alampata.online';    // SMTP username
+				$mail->Password = '';                                 // SMTP password
+				$mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+				$mail->Port = 465;                                    // TCP port to connect to
+
+				$mail->setFrom('akshay@alampata.online','Akshay Uperia');
+				$mail->addAddress($emailadd);                            // Add a recipient
+				$mail->addReplyTo('akshay@alampata.online','Akshay Uperia');
+
+			   $bodyContent = "Dear <b>Sir/Madam</b>,</br>";
+			   $bodyContent .= "<p>Send a Follower List attachement file </p>";
+
+				$mail->Subject = 'List of Follower';
+				$mail->Body = $bodyContent;
+				$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+				
+				$mail->AddStringAttachment($pdfString,'follower.pdf');
+				if (!$mail->send()) {
+					echo 'Message could not be sent.';
+					echo 'Mailer Error: ' . $mail->ErrorInfo;
+				} else {
+					echo 'Message has been sent';
+				}
+				
+							
 			}
-			
-           
+			 
+			  	
         }
+        
+       
         
 		/* === upload public user follower in google spreadsheet === */
 		public function upload_follower_name($key) {
@@ -240,8 +269,6 @@
         }
         
         
-
-
         
     }
 ?>
