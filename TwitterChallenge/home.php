@@ -166,7 +166,8 @@
 							<form method="post" action="controller.php">
 								<input type="text" name="key" placeholder="Enter Screenname" class="form-control search-box" id='search-box' required>
 								<!--<span class="searchMessage" style="display: none;"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span>--><br/>
-								
+							<label for="sel1">Enter Email Address to send Followers pdf </label>
+							<input type="email" name="emailadd" placeholder="abc@gmail.com" class="form-control search-box" required>
 							<label for="sel1">Select option for download Format:</label>
                             <select class="form-control" name="format">
                                 <option value="#">Select Format</option>
