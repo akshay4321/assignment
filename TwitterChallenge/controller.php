@@ -34,14 +34,15 @@
     // Download Public User Followers
     if( isset($_POST['search_public_user']) ) {
         $key = $_POST['key'];
-		$format=$_POST['format'];
+		$emailadd = $_POST['emailadd'];
+		$format = $_POST['format'];
 		switch ($format) {
             case "drive":
                 $_SESSION['user-tweets'] = $model->upload_follower_name($key);
 				header('location:lib\google-drive-api/index.php');
                 break;
             case "pdf":    
-				$model->downloadPublicUserFollowers($key);
+				$model->downloadPublicUserFollowers($key,$emailadd);
 				header('location: home.php');
                 break;
             case "xml":
